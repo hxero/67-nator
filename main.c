@@ -63,12 +63,21 @@ static int match_pattern(const char *word, const char *target, const char *patte
 static int match_pattern_soft(const char *word, const char *target, const char *pattern) {
     int target_set[26];
     build_set(target, target_set);
-    int word_set[26];
-    build_set(word, word_set);
+
+    int target_count[26] = {0};
+    for (int i = 0; target[i]; i++) {
+        int c = (unsigned char)target[i] - 'a';
+        if (c >= 0 && c < 26) target_count[c]++;
+    }
+
+    int used[26] = {0};
+
     for (int i = 0; pattern[i]; i++) {
         if (pattern[i] == 'x') {
             int c = (unsigned char)word[i] - 'a';
             if (c < 0 || c >= 26 || !target_set[c]) return 0;
+            used[c]++;
+            if (used[c] > target_count[c]) return 0;
         } else {
             int c = (unsigned char)word[i] - 'a';
             if (c >= 0 && c < 26 && target_set[c]) return 0;
