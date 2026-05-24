@@ -18,6 +18,10 @@ cd 67-nator
 ```sh
 gcc -o sixseven main.c 
 ```
+or
+```sh
+clang main.c -o sixseven
+```
 
 # usage
 ```sh
